@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>My Account</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('book') }}">Book an Appointment</a></li>
+                <li><a href="{{ url_for('my_bookings') }}">My Bookings</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Account Details</h2>
+        
+        <!-- User Info Display -->
+        <form method="POST" action="{{ url_for('update_account') }}">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" value="{{ user.username }}" disabled>
+            
+            <label for="new_password">New Password:</label>
+            <input type="password" id="new_password" name="new_password" placeholder="Enter new password">
+
+            <label for="confirm_password">Confirm New Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm new password">
+
+            <button type="submit">Update Account</button>
+        </form>
+
+        {% if flash_messages %}
+            <ul>
+                {% for message in flash_messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Car Wash System</p>
+    </footer>
+</body>
+</html>

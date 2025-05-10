@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | Car Wash System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: rgb(0, 123, 255);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            background: #ffffffd2;
+            padding: 40px;
+            border-radius: 18px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+        }
+
+        h1 {
+            color: #007BFF;
+            font-size: 30px;
+            margin-bottom: 35px;
+        }
+
+        .btn {
+            display: block;
+            width: 80%;
+            margin: 15px auto;
+            padding: 14px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(to right, #007BFF, #0056b3);
+            color: white;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 14px rgba(0, 123, 255, 0.4);
+        }
+
+        .btn-logout {
+            background: linear-gradient(to right, #dc3545, #b52b38);
+            box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3);
+        }
+
+        .btn-logout:hover {
+            box-shadow: 0 6px 14px rgba(220, 53, 69, 0.4);
+        }
+
+        .emoji {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚗 Welcome, {{ username }}!</h1>
+
+        <a href="/book" class="btn"><span class="emoji">🧼</span> Book a Car Wash</a>
+        <a href="/my-bookings" class="btn"><span class="emoji">📋</span> View My Bookings</a>
+        <a href="/my-account" class="btn"><span class="emoji">👤</span> My Profile</a>
+        <a href="/logout" class="btn btn-logout"><span class="emoji">🚪</span> Logout</a>
+    </div>
+</body>
+</html>

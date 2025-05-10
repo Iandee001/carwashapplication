@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Wash System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .header {
+            text-align: center;
+            padding: 50px 0;
+            background-color: #007bff;
+            color: white;
+            width: 100%;
+            position: absolute;
+            top: 0;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: auto;
+            margin-top: 100px;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 25px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .form-container {
+            display: none;
+            text-align: center;
+            background-color: white;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .form-container.show {
+            opacity: 1;
+            pointer-events: auto;
+            display: block;
+        }
+
+        .form-container input {
+            padding: 10px;
+            width: 100%;
+            margin: 10px 0;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .form-container button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .form-container a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .form-container a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+        }
+
+        .backdrop.show {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Welcome to Our Car Wash System</h1>
+        <p>We keep your car clean, fresh, and shiny!</p>
+    </div>
+
+    <div class="container" id="contentContainer">
+        <h2>Book an Appointment</h2>
+        <div class="button-container">
+            <button id="bookAppointmentBtn" onclick="checkLoginStatus()">Book Now</button>
+        </div>
+
+        <h2 style="margin-top: 40px;">Sign In or Create an Account</h2>
+        <div class="button-container">
+            <button id="loginBtn">Login</button>
+            <button id="signupBtn">Sign Up</button>
+        </div>
+    </div>
+
+    <div id="backdrop" class="backdrop"></div>
+
+    <div class="form-container" id="loginForm">
+        <h3>Login</h3>
+        <form method="POST" action="/login">
+            <input type="text" name="username" placeholder="Username" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="javascript:void(0);" id="goToSignup">Create an Account</a></p>
+    </div>
+
+    <div class="form-container" id="signupForm">
+        <h3>Create Account</h3>
+        <form method="POST" action="/signup">
+            <input type="text" name="username" placeholder="Username" required><br>
+            <input type="email" name="email" placeholder="Email" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
+            <button type="submit">Sign Up</button>
+        </form>        
+        <p>Already have an account? <a href="javascript:void(0);" id="goToLogin">Login</a></p>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 Car Wash System. All rights reserved.</p>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Fade in on page load
+            document.body.style.opacity = 1;
+            document.getElementById("contentContainer").style.opacity = 1;
+
+            function showModal(modalId) {
+                document.getElementById(modalId).classList.add('show');
+                document.getElementById('backdrop').classList.add('show');
+            }
+
+            function hideModal(modalId) {
+                document.getElementById(modalId).classList.remove('show');
+                document.getElementById('backdrop').classList.remove('show');
+            }
+
+            document.getElementById("loginBtn").addEventListener("click", function () {
+                showModal("loginForm");
+            });
+
+            document.getElementById("signupBtn").addEventListener("click", function () {
+                showModal("signupForm");
+            });
+
+            document.getElementById("goToSignup").addEventListener("click", function () {
+                hideModal("loginForm");
+                showModal("signupForm");
+            });
+
+            document.getElementById("goToLogin").addEventListener("click", function () {
+                hideModal("signupForm");
+                showModal("loginForm");
+            });
+
+            document.getElementById("backdrop").addEventListener("click", function () {
+                hideModal("loginForm");
+                hideModal("signupForm");
+            });
+
+            // Make checkLoginStatus global
+            window.checkLoginStatus = function () {
+                const loggedIn = false; // Replace with actual logic
+                if (loggedIn) {
+                    window.location.href = "/book-appointment";
+                } else {
+                    alert("Please log in or sign up before booking an appointment.");
+                    showModal("loginForm");
+                }
+            };
+        });
+    </script>
+
+</body>
+
+</html>
